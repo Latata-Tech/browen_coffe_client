@@ -1,3 +1,4 @@
+import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -9,7 +10,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20,),
               ElevatedButton(
                   onPressed: () {
-                    print("di klik");
+                    Navigator.popAndPushNamed(context, '/dashboard');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff196CD2),

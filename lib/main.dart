@@ -1,3 +1,4 @@
+import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,24 +19,15 @@ class MyApp extends StatelessWidget {
     ]);
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => Login(),
+        '/dashboard': (context) => Dashboard()
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Browenz Coffee'),
+      home: Login(),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Login();
   }
 }
