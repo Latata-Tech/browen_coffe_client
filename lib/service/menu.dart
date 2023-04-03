@@ -13,18 +13,18 @@ class MenuService {
 
   Future<List<Menu>> getMenus() async {
     try {
-      print(storage.getItem('accessToken'));
       final response = await http.get(Uri.parse('$API_URL/menus'), headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${storage.getItem('accessToken')}'
       });
-      print(response.body);
       if(response.statusCode == 200) {
         final resBody = jsonDecode(response.body) as Map<String, dynamic>;
-        print(resBody);
-        return (resBody['data'] as List<Map<String, dynamic>>)
-            .map((data) => Menu.fromMap(data))
-            .toList();
+        List<Menu> listMenus = [];
+        for (var data in (resBody['data'] as List<dynamic>)) {
+          print(data);
+          listMenus.add(Menu.fromJson(data));
+        }
+        return listMenus;
       }
       return [];
     } catch (e) {

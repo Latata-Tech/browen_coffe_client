@@ -99,25 +99,26 @@ class _SellingState extends State<Selling> {
             const SizedBox(
               height: 20,
             ),
-            FutureBuilder(
-              future: _futureMenu,
-              builder: (context, snapshot) {
-                if(snapshot.hasData) {
-                  return  Expanded(
-                    child: GridView.builder(
-                        itemCount: snapshot.data!.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4),
-                        itemBuilder: (BuildContext context, int index) {
-                          return CardMenu();
-                        }),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
+            Expanded(
+              child: FutureBuilder(
+                future: _futureMenu,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    return  GridView.builder(
+                          itemCount: snapshot.data!.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4),
+                          itemBuilder: (BuildContext context, int index) {
+                            return CardMenu();
+                          },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-                return const CircularProgressIndicator();
-              },
+                  return const CircularProgressIndicator();
+                },
+              ),
             )
           ],
         ),
@@ -189,15 +190,13 @@ class CardMenu extends StatelessWidget {
   const CardMenu({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
+    return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10)),
         child: Row(
           children: const [Text('ini gambar'), Text('Ini nama menu')],
         ),
-      ),
     );
   }
 }
