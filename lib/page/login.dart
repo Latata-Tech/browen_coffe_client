@@ -2,9 +2,11 @@ import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/service/auth.dart';
 import 'package:browenz_coffee/widget/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  final LocalStorage storage;
+  const Login({Key? key, required this.storage}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -14,6 +16,12 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  late final AuthService authService;
+  @override
+  void initState() {
+    super.initState();
+    authService = AuthService(widget.storage);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +75,7 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20,),
               ElevatedButton(
                   onPressed: () {
-                    signIn(email.text, password.text).then((value) {
+                    authService.signIn(email.text, password.text).then((value) {
                       if(value) Navigator.popAndPushNamed(context, '/dashboard');
                       else {
                         final snackBar = alert("Email atau Password yang dimasukan salah!", Colors.redAccent);

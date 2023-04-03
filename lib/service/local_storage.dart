@@ -1,3 +1,3 @@
 import 'package:localstorage/localstorage.dart';
 
-var localStorage = LocalStorage("dataLocal");
+final LocalStorage localStorage = LocalStorage("dataLocal.json");

@@ -1,29 +1,28 @@
+import 'package:browenz_coffee/model/menu.dart';
+import 'package:browenz_coffee/service/menu.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 
 class Selling extends StatefulWidget {
-  const Selling({Key? key}) : super(key: key);
+  final LocalStorage storage;
+  const Selling({Key? key, required this.storage}) : super(key: key);
 
   @override
   State<Selling> createState() => _SellingState();
 }
 
 class _SellingState extends State<Selling> {
-  List<Widget> data = <Widget>[
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu(),
-    CardMenu()
-  ];
-
+  late final MenuService menuService;
+  late Future<List<Menu>> _futureMenu;
   List<String> categories = <String>['Semua', 'Coffee', 'Tea'];
+
+
+  @override
+  void initState() {
+    super.initState();
+    menuService = MenuService(widget.storage);
+    _futureMenu = menuService.getMenus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,14 +99,25 @@ class _SellingState extends State<Selling> {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: GridView.builder(
-                  itemCount: data.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4),
-                  itemBuilder: (BuildContext context, int index) {
-                    return data[index];
-                  }),
+            FutureBuilder(
+              future: _futureMenu,
+              builder: (context, snapshot) {
+                if(snapshot.hasData) {
+                  return  Expanded(
+                    child: GridView.builder(
+                        itemCount: snapshot.data!.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4),
+                        itemBuilder: (BuildContext context, int index) {
+                          return CardMenu();
+                        }),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                return const CircularProgressIndicator();
+              },
             )
           ],
         ),
@@ -159,7 +169,7 @@ class _SellingState extends State<Selling> {
   Widget orderMenu() {
     return Flexible(
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20),
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           color: Color(0XFFD9D9D9)

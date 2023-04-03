@@ -1,6 +1,7 @@
 import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/page/login.dart';
 import 'package:browenz_coffee/page/selling.dart';
+import 'package:browenz_coffee/service/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,14 +23,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       initialRoute: '/login',
       routes: {
-        '/login': (context) => Login(),
+        '/login': (context) => Login(storage: localStorage,),
         '/dashboard': (context) => Dashboard(),
-        '/selling': (context) => Selling()
+        '/selling': (context) => Selling(storage: localStorage,)
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: Login(storage: localStorage,),
     );
   }
 }
