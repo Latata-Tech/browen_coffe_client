@@ -1,5 +1,6 @@
 import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/service/auth.dart';
+import 'package:browenz_coffee/widget/alert.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -66,7 +67,13 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20,),
               ElevatedButton(
                   onPressed: () {
-                    signIn(email.text, password.text).then((value) => Navigator.popAndPushNamed(context, '/dashboard'));
+                    signIn(email.text, password.text).then((value) {
+                      if(value) Navigator.popAndPushNamed(context, '/dashboard');
+                      else {
+                        final snackBar = alert("Email atau Password yang dimasukan salah!", Colors.redAccent);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff196CD2),

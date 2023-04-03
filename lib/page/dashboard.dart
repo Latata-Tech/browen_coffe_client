@@ -16,6 +16,25 @@ class _DashboardState extends State<Dashboard> {
           IconButton(onPressed: () => print("Profil"), icon: const Icon(Icons.account_circle_rounded))
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            ListTile(
+              title: const Text('Dashboard'),
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/dashboard');
+              },
+            ),
+            ListTile(
+              title: const Text('Penjualan'),
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/selling');
+              },
+            ),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(

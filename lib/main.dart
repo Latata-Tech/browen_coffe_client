@@ -1,5 +1,6 @@
 import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/page/login.dart';
+import 'package:browenz_coffee/page/selling.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => Login(),
-        '/dashboard': (context) => Dashboard()
+        '/dashboard': (context) => Dashboard(),
+        '/selling': (context) => Selling()
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
