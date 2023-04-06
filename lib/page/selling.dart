@@ -2,6 +2,7 @@ import 'package:browenz_coffee/model/menu.dart';
 import 'package:browenz_coffee/service/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+const List<String> variant = <String>['Hot', 'Ice'];
 
 class Selling extends StatefulWidget {
   final LocalStorage storage;
@@ -109,7 +110,10 @@ class _SellingState extends State<Selling> {
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4),
                           itemBuilder: (BuildContext context, int index) {
-                            return CardMenu();
+                            return CardMenu(
+                              imageURL: snapshot.data![index].photo,
+                              name: snapshot.data![index].name,
+                            );
                           },
                     );
                   } else if (snapshot.hasError) {
@@ -186,17 +190,102 @@ class _SellingState extends State<Selling> {
   }
 }
 
-class CardMenu extends StatelessWidget {
-  const CardMenu({Key? key}) : super(key: key);
+class CardMenu extends StatefulWidget {
+  final String imageURL, name;
+  const CardMenu({Key? key, required this.imageURL, required this.name}) : super(key: key);
+
+  @override
+  State<CardMenu> createState() => _CardMenuState();
+}
+
+class _CardMenuState extends State<CardMenu> {
+  String selectedVariant = variant.first;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          children: const [Text('ini gambar'), Text('Ini nama menu')],
+    return GestureDetector(
+      child: Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(widget.imageURL)
+                      )
+                    ),
+                  )
+              ),
+              Container(
+                height: 30,
+                  child: Center(child: Text(widget.name))
+              )
+            ],
+          ),
+      ),
+      onTap: () => showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.name),
+            Text('Rp.15,000')
+          ],
         ),
+        content:  SingleChildScrollView(
+          child: Column(
+                children: [
+                  DropdownButtonFormField(
+                    value: selectedVariant,
+                      items:  variant.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(value: value,child: Text(value));
+                  }).toList(), onChanged: (String? value) {
+                    setState(() {
+                      selectedVariant = value!;
+                    });
+                  }),
+                  const SizedBox(height: 20,),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ElevatedButton(onPressed: () {}, child: Icon(Icons.add_circle)),
+                        SizedBox(
+                          width: 100,
+                          child: TextFormField(
+                            textAlign: TextAlign.center,
+                            initialValue: "0",
+                          ),
+                        ),
+                        ElevatedButton(onPressed: () {}, child: Icon(Icons.remove_circle)),
+                      ],
+                    ),
+                  )
+                ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Batal', style: TextStyle(color: Colors.redAccent),),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Simpan'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      )),
     );
   }
 }
