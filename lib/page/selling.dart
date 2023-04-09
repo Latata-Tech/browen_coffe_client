@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:browenz_coffee/model/menu.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
 import '../model/order_menu.dart';
-
 
 class Selling extends StatefulWidget {
   final LocalStorage storage;
@@ -168,11 +166,30 @@ class _SellingState extends State<Selling> {
             ),
             const Divider(),
             Expanded(
-                child: ListView.builder(
-                  itemCount: menu.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomListItem(action: removeMenuItem, menu: menu[index], index: index,);
-                  }),
+              child: ListView.builder(
+                itemCount: menu.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CustomListItem(
+                    action: removeMenuItem,
+                    menu: menu[index],
+                    index: index,
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0XFF509D57),
+                      fixedSize: Size(double.infinity, 40),
+                  ),
+                  child: const Text("Buat Pesanan"),
+                ),
+              ),
             ),
           ],
         ),
