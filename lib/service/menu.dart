@@ -21,7 +21,6 @@ class MenuService {
         final resBody = jsonDecode(response.body) as Map<String, dynamic>;
         List<Menu> listMenus = [];
         for (var data in (resBody['data'] as List<dynamic>)) {
-          print(data);
           listMenus.add(Menu.fromJson(data));
         }
         return listMenus;

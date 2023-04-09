@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:browenz_coffee/model/menu.dart';
 import 'package:browenz_coffee/service/menu.dart';
+import 'package:browenz_coffee/service/order.dart';
+import 'package:browenz_coffee/widget/alert_payment.dart';
 import 'package:browenz_coffee/widget/card_menu.dart';
 import 'package:browenz_coffee/widget/chip_category.dart';
 import 'package:browenz_coffee/widget/custom_list_item.dart';
@@ -20,6 +22,7 @@ class Selling extends StatefulWidget {
 
 class _SellingState extends State<Selling> {
   late final MenuService menuService;
+  late final OrderService orderService;
   late Future<List<Menu>> _futureMenu;
   List<OrderMenu> menu = [];
 
@@ -27,6 +30,7 @@ class _SellingState extends State<Selling> {
   void initState() {
     super.initState();
     menuService = MenuService(widget.storage);
+    orderService = OrderService(widget.storage);
     _futureMenu = menuService.getMenus();
   }
 
@@ -42,9 +46,14 @@ class _SellingState extends State<Selling> {
     });
   }
 
+  void removeAllOrderItem() {
+    setState(() {
+      menu.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(menu);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -182,7 +191,9 @@ class _SellingState extends State<Selling> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => showDialog(context: context, builder: (BuildContext context) {
+                    return AlertPayment(menu: menu, total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element), service: orderService, removeMenu: removeAllOrderItem,);
+                  }),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF509D57),
                       fixedSize: Size(double.infinity, 40),

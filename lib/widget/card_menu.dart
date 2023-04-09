@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../model/menu.dart';
 import '../model/order_menu.dart';
 
-const List<String> variant = <String>['Hot', 'Ice'];
+const List<String> variant = <String>['hot', 'ice'];
 
 class CardMenu extends StatefulWidget {
   final Menu menu;
@@ -163,12 +163,15 @@ class _CardMenuState extends State<CardMenu> {
                     ElevatedButton(
                       child: const Text('Simpan'),
                       onPressed: () {
-                        widget.menuSelected(OrderMenu(
-                            thumbnail: widget.menu.photo,
-                            name: widget.menu.name,
-                            price: price,
-                            quantity: quantity,
-                            variant: selectedVariant));
+                        widget.menuSelected(
+                          OrderMenu(
+                              id: widget.menu.id,
+                              thumbnail: widget.menu.photo,
+                              name: widget.menu.name,
+                              price: price,
+                              quantity: quantity,
+                              variant: selectedVariant),
+                        );
                         setState(() {
                           quantity = 0;
                         });
