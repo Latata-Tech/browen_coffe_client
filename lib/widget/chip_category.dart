@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../model/category.dart';
+
 List<String> categories = <String>['Semua', 'Coffee', 'Tea'];
 
 class ChipCategory extends StatelessWidget {
-  const ChipCategory({Key? key}) : super(key: key);
+  final Future<List<Category>>? categories;
+  final Function filterMenu;
+  final int selectedChip;
+  const ChipCategory({Key? key, required this.categories, required this.filterMenu, required this.selectedChip}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +27,35 @@ class ChipCategory extends StatelessWidget {
             height: 10,
           ),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: FilterChip(
-                    label: Text(categories[index]),
-                    backgroundColor: Colors.white,
-                    onSelected: (bool value) {},
-                    selected: index == 0,
-                    selectedColor: Colors.lightBlue,
-                    labelStyle: TextStyle(
-                        color: index == 0 ? Colors.white : Colors.black),
-                  ),
-                );
+            child: FutureBuilder(
+              future: categories,
+              builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+                if(snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: FilterChip(
+                          label: Text(snapshot.data![index].name),
+                          backgroundColor: Colors.white,
+                          onSelected: (bool value) {
+                            filterMenu(snapshot.data![index].id, index);
+                          },
+                          selected: snapshot.data![index].id == selectedChip,
+                          selectedColor: Colors.lightBlue,
+                          labelStyle: TextStyle(
+                              color: snapshot.data![index].id == selectedChip  ? Colors.white : Colors.black),
+                        ),
+                      );
+                    },
+                  );
+                } else if(snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                return const CircularProgressIndicator();
               },
             ),
           )

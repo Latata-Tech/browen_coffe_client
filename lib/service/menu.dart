@@ -11,9 +11,11 @@ class MenuService {
 
   MenuService(this.storage);
 
-  Future<List<Menu>> getMenus() async {
+  Future<List<Menu>> getMenus({int? categoryId}) async {
     try {
-      final response = await http.get(Uri.parse('$API_URL/menus'), headers: {
+      String uri = '$API_URL/menus';
+      if(categoryId != null && categoryId != 0) uri = "$uri?category=$categoryId";
+      final response = await http.get(Uri.parse(uri), headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${storage.getItem('accessToken')}'
       });

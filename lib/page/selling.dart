@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:browenz_coffee/model/category.dart';
 import 'package:browenz_coffee/model/menu.dart';
+import 'package:browenz_coffee/service/category.dart';
 import 'package:browenz_coffee/service/menu.dart';
 import 'package:browenz_coffee/service/order.dart';
 import 'package:browenz_coffee/widget/alert_payment.dart';
@@ -23,7 +25,11 @@ class Selling extends StatefulWidget {
 class _SellingState extends State<Selling> {
   late final MenuService menuService;
   late final OrderService orderService;
+  late final CategoryService categoryService;
   late Future<List<Menu>> _futureMenu;
+  late Future<List<Category>>? _futureCategory;
+  Future<List<Menu>>? filteredMenu;
+  late int selectedChip;
   List<OrderMenu> menu = [];
 
   @override
@@ -31,7 +37,10 @@ class _SellingState extends State<Selling> {
     super.initState();
     menuService = MenuService(widget.storage);
     orderService = OrderService(widget.storage);
+    categoryService = CategoryService(widget.storage);
     _futureMenu = menuService.getMenus();
+    _futureCategory = categoryService.getCategories();
+    selectedChip = 0;
   }
 
   void addMenuItem(OrderMenu orderMenu) {
@@ -49,6 +58,13 @@ class _SellingState extends State<Selling> {
   void removeAllOrderItem() {
     setState(() {
       menu.clear();
+    });
+  }
+
+  void filterByCategory(int id, int index) {
+    setState(() {
+      filteredMenu = menuService.getMenus(categoryId: id);
+      selectedChip = index;
     });
   }
 
@@ -91,7 +107,7 @@ class _SellingState extends State<Selling> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ChipCategory(),
+                ChipCategory(categories: _futureCategory, filterMenu: filterByCategory, selectedChip: selectedChip,),
                 const SizedBox(
                   height: 20,
                 ),
@@ -131,7 +147,7 @@ class _SellingState extends State<Selling> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _futureMenu,
+                future: filteredMenu ?? _futureMenu,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return GridView.builder(
