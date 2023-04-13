@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:browenz_coffee/model/category.dart';
 import 'package:browenz_coffee/model/menu.dart';
+import 'package:browenz_coffee/page/order.dart';
 import 'package:browenz_coffee/service/category.dart';
 import 'package:browenz_coffee/service/menu.dart';
 import 'package:browenz_coffee/service/order.dart';
@@ -31,6 +30,7 @@ class _SellingState extends State<Selling> {
   Future<List<Menu>>? filteredMenu;
   late int selectedChip;
   List<OrderMenu> menu = [];
+  int _selectedNavigation = 0;
 
   @override
   void initState() {
@@ -68,6 +68,12 @@ class _SellingState extends State<Selling> {
     });
   }
 
+  void _onNavigationTapped(int index) {
+    setState(() {
+      _selectedNavigation = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,8 +104,8 @@ class _SellingState extends State<Selling> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: Container(
-        padding: EdgeInsets.all(20),
+      body: _selectedNavigation == 1 ? Order(orderService: orderService) : Container(
+        padding: const EdgeInsets.all(20),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Row(
@@ -117,6 +123,16 @@ class _SellingState extends State<Selling> {
             orderMenu()
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Menu'),
+          BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Pesanan'),
+        ],
+        selectedItemColor: Colors.blue,
+        currentIndex: _selectedNavigation,
+        onTap: _onNavigationTapped,
+
       ),
     );
   }
@@ -166,7 +182,7 @@ class _SellingState extends State<Selling> {
                     return Text('${snapshot.error}');
                   }
 
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             )
@@ -212,7 +228,7 @@ class _SellingState extends State<Selling> {
                   }),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF509D57),
-                      fixedSize: Size(double.infinity, 40),
+                      fixedSize: const Size(double.infinity, 40),
                   ),
                   child: const Text("Buat Pesanan"),
                 ),
