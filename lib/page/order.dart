@@ -1,7 +1,7 @@
 import 'package:browenz_coffee/service/order.dart';
+import 'package:browenz_coffee/widget/alert.dart';
 import 'package:browenz_coffee/widget/detail_order.dart';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import '../model/order.dart' as order_model;
 
 class Order extends StatefulWidget {
@@ -21,7 +21,16 @@ class _OrderState extends State<Order> {
   }
 
   void displayOrder(order_model.Order order) {
-    ;
+    showDialog(context: context, builder: (BuildContext context) => DetailOrder(order: order));
+  }
+
+  void markAsDone(String orderCode) {
+    widget.orderService.orderDone(orderCode).then((value) {
+      final snackBar = alert(value[1], value[0] == 'success' ? Colors.green : Colors.redAccent);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      setState(() {
+      });
+    });
   }
 
   @override
@@ -32,7 +41,7 @@ class _OrderState extends State<Order> {
         crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(left: 12),
+              margin: const EdgeInsets.only(left: 12),
               child: const Text('Daftar pesanan belum di proses', style: TextStyle(
                 fontSize: 21
               ),),
@@ -41,10 +50,11 @@ class _OrderState extends State<Order> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: FutureBuilder(
-                    future: _futureOrder,
+                    future: widget.orderService.getOrder(),
                     builder: (BuildContext context, AsyncSnapshot<List<order_model.Order>> snapshot) {
+                      print("Dipanggil Bangh");
                       if(snapshot.hasData) {
-                        return ListView.builder(
+                        return snapshot.data!.length > 0 ? ListView.builder(
                           itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                             var orderItems = snapshot.data![index].orderDetail.map((value) => Text("${value.name}-Qty:${value.qty}")).toList();
@@ -56,12 +66,19 @@ class _OrderState extends State<Order> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: orderItems.length > 2 ? orderItems.sublist(0, 2) : orderItems,
                                   ),
-                                  trailing: const Icon(Icons.more_vert),
-                                  onTap: () => showDialog(context: context, builder: (BuildContext context) => DetailOrder(order: snapshot.data![index])),
+                                  trailing: PopupMenuButton(
+                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<Widget>>[
+                                      PopupMenuItem(
+                                          child: const Text('Selesai'),
+                                        onTap: () => markAsDone(snapshot.data![index].code),
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () => displayOrder(snapshot.data![index]),
                                 ),
                               );
                             },
-                        );
+                        ) : const Center(child: Text('Tidak ada pesanan yang belum di proses.', style: TextStyle(color: Colors.grey),),);
                       } else if(snapshot.hasError) {
                         return Text(snapshot.hasError as String);
                       }

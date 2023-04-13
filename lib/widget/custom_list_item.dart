@@ -32,7 +32,11 @@ class _ListItemDescription extends StatelessWidget {
                   NumberFormat.currency(
                           locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                       .format(price),
-                  style: const TextStyle(fontSize: 11),
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+                Text(
+                 "varian: $variant",
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
                 )
               ],
             ),

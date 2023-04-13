@@ -16,11 +16,12 @@ class _ListOrderItem extends StatelessWidget {
   const _ListOrderItem(
       {Key? key,
       required this.name,
+        required this.variant,
       required this.quantity,
       required this.price})
       : super(key: key);
 
-  final String name;
+  final String name, variant;
   final int quantity, price;
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class _ListOrderItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: defaultStyle),
+              Text("$name - $variant", style: defaultStyle),
               Text(
                 "Qty:$quantity",
                 style: const TextStyle(
@@ -106,7 +107,9 @@ class _AlertPaymentState extends State<AlertPayment> {
                       .map((value) => _ListOrderItem(
                           name: value.name,
                           quantity: value.quantity,
-                          price: value.price))
+                          price: value.price,
+                    variant: value.variant,
+                  ))
                       .toList(),
                 ),
               ),
@@ -266,7 +269,7 @@ class _AlertPaymentState extends State<AlertPayment> {
                 return;
               }
               widget.service.createOrder(widget.menu, 0, widget.total, 'cash').then((value) {
-                final snackBar = alert(value[1], value[0] == 'success' ? Colors.greenAccent : Colors.redAccent);
+                final snackBar = alert(value[1], value[0] == 'success' ? Colors.green : Colors.redAccent);
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 widget.removeMenu();
                 Navigator.of(context).pop();

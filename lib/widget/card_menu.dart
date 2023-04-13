@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:browenz_coffee/widget/alert.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -91,7 +92,7 @@ class _CardMenuState extends State<CardMenu> {
                             onChanged: (String? value) {
                               setState(() {
                                 selectedVariant = value!;
-                                price = selectedVariant == 'Hot'
+                                price = selectedVariant == 'hot'
                                     ? widget.menu.hotPrice
                                     : widget.menu.coldPrice;
                               });
@@ -163,15 +164,19 @@ class _CardMenuState extends State<CardMenu> {
                     ElevatedButton(
                       child: const Text('Simpan'),
                       onPressed: () {
-                        widget.menuSelected(
-                          OrderMenu(
-                              id: widget.menu.id,
-                              thumbnail: widget.menu.photo,
-                              name: widget.menu.name,
-                              price: price,
-                              quantity: quantity,
-                              variant: selectedVariant),
-                        );
+                        if(quantity == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(alert('Quantity tidak boleh 0', Colors.redAccent));
+                        } else {
+                          widget.menuSelected(
+                            OrderMenu(
+                                id: widget.menu.id,
+                                thumbnail: widget.menu.photo,
+                                name: widget.menu.name,
+                                price: price,
+                                quantity: quantity,
+                                variant: selectedVariant),
+                          );
+                        }
                         setState(() {
                           quantity = 0;
                         });

@@ -53,4 +53,20 @@ class OrderService {
       return [];
     }
   }
+
+  Future<List<String>> orderDone(String id) async {
+    try {
+      final response = await http.put(Uri.parse('$API_URL/orders/$id'), headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      }, body: jsonEncode({'status': 'done'}));
+      print(response.body);
+      final resBody = jsonDecode(response.body) as Map<String, dynamic>;
+      return [resBody['status'], resBody['message']];
+    } catch (e) {
+      print(e);
+      return ['failed', 'Terjadi kesalahan pada aplikasi'];
+    }
+  }
 }
