@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => Login(storage: localStorage,),
-        '/dashboard': (context) => Dashboard(),
+        '/dashboard': (context) => Dashboard(storage: localStorage,),
         '/selling': (context) => Selling(storage: localStorage,)
       },
       theme: ThemeData(
