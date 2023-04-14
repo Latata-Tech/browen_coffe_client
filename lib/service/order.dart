@@ -93,9 +93,49 @@ class OrderService {
     }
   }
 
+  Future<List<Order>> getOrders(String? date) async {
+    try {
+      final response = await http.get(Uri.parse('$API_URL/orders?date=$date'), headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+      print(response.body);
+      final resBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = (resBody['data'] as List<dynamic>);
+      final List<Order> result = data.map((value) {
+        List<OrderDetail> detail = (value['detail'] as List<dynamic>)
+            .map((value) => OrderDetail.fromJson(value))
+            .toList();
+        return Order.fromJson(value, detail);
+      }).toList();
+      return result;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<int> getTotalOrderToday() async {
     try {
       final response = await http.get(Uri.parse('$API_URL/orders/total-today'), headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+      print(response.body);
+      final resBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = (resBody['data'] as Map<String, dynamic>);
+      return data['total'];
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  Future<int> getTotalOrders(String? date) async {
+    try {
+      final response = await http.get(Uri.parse('$API_URL/orders/total?date=$date'), headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${storage.getItem('accessToken')}'

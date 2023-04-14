@@ -1,3 +1,4 @@
+import 'package:browenz_coffee/page/owner_selling.dart';
 import 'package:browenz_coffee/page/staff_selling.dart';
 import 'package:browenz_coffee/service/auth.dart';
 import 'package:browenz_coffee/service/order.dart';
@@ -67,7 +68,7 @@ class _ReportState extends State<Report> {
               if(snapshot.data!.roleId == 2) {
                 return StaffSelling(orderService: serviceOrder);
               } else {
-                return Center(child: Text('Owner'),);
+                return OwnerSelling(orderService: serviceOrder,);
               }
             } else if(snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()),);
