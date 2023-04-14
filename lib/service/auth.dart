@@ -7,6 +7,8 @@ import 'package:browenz_coffee/service/local_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
+import '../model/user.dart';
+
 
 class AuthService {
   LocalStorage storage;
@@ -25,6 +27,21 @@ class AuthService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<User> getUser() async {
+    try {
+      final response = await http.get(Uri.parse('$API_URL/user'), headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+      if(response.statusCode == 200) {
+        return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      }
+      throw Exception('err');
+    } catch (e) {
+      return User(0, "", "", 0);
     }
   }
 

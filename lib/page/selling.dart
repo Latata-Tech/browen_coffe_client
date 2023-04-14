@@ -100,6 +100,12 @@ class _SellingState extends State<Selling> {
                 Navigator.popAndPushNamed(context, '/selling');
               },
             ),
+            ListTile(
+              title: const Text('Laporan'),
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/report');
+              },
+            ),
           ],
         ),
       ),

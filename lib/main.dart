@@ -1,5 +1,6 @@
 import 'package:browenz_coffee/page/dashboard.dart';
 import 'package:browenz_coffee/page/login.dart';
+import 'package:browenz_coffee/page/report.dart';
 import 'package:browenz_coffee/page/selling.dart';
 import 'package:browenz_coffee/service/local_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => Login(storage: localStorage,),
         '/dashboard': (context) => Dashboard(storage: localStorage,),
-        '/selling': (context) => Selling(storage: localStorage,)
+        '/selling': (context) => Selling(storage: localStorage,),
+        '/report': (context) => Report(storage: localStorage)
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

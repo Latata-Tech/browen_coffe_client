@@ -47,6 +47,12 @@ class _DashboardState extends State<Dashboard> {
                 Navigator.popAndPushNamed(context, '/selling');
               },
             ),
+            ListTile(
+              title: const Text('Laporan'),
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/report');
+              },
+            ),
           ],
         ),
       ),
