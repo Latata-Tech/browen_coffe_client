@@ -229,9 +229,13 @@ class _SellingState extends State<Selling> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => showDialog(context: context, builder: (BuildContext context) {
-                    return AlertPayment(menu: menu, total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element), service: orderService, removeMenu: removeAllOrderItem,);
-                  }),
+                  onPressed: () {
+                    if(menu.isNotEmpty) {
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertPayment(menu: menu, total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element), service: orderService, removeMenu: removeAllOrderItem,);
+                      });
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF509D57),
                       fixedSize: const Size(double.infinity, 40),

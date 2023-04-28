@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fariz.com.example.browenz_coffee">
-   <application
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
         android:label="browenz_coffee"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
