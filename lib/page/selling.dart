@@ -232,7 +232,12 @@ class _SellingState extends State<Selling> {
                   onPressed: () {
                     if(menu.isNotEmpty) {
                       showDialog(context: context, builder: (BuildContext context) {
-                        return AlertPayment(menu: menu, total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element), service: orderService, removeMenu: removeAllOrderItem,);
+                        return AlertPayment(menu: menu,
+                          total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element),
+                          service: orderService,
+                          removeMenu: removeAllOrderItem,
+                          discount: menu.map((value) => value.quantity * value.discount).toList().reduce((value, element) => value + element)
+                        );
                       });
                     }
                   },

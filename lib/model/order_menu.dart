@@ -1,6 +1,6 @@
 class OrderMenu {
   final String name, variant, thumbnail;
-  final int quantity, price, id;
+  final int quantity, price, id, discount;
 
   OrderMenu({
     required this.id,
@@ -8,6 +8,7 @@ class OrderMenu {
     required this.name,
     required this.price,
     required this.quantity,
-    required this.variant
+    required this.variant,
+    required this.discount
   });
 }

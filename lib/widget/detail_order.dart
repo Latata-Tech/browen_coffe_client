@@ -37,7 +37,7 @@ class _ListOrderItem extends StatelessWidget {
               ),
             ],
           ),
-          Text(Converter.currencyIndonesia(price * quantity),
+          Text(Converter.currencyIndonesia(price),
               style: const TextStyle(
                 fontSize: 13,
               )),

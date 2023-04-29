@@ -58,7 +58,8 @@ class AlertPayment extends StatefulWidget {
   final int total;
   final OrderService service;
   final Function removeMenu;
-  const AlertPayment({Key? key, required this.menu, required this.total, required this.service, required this.removeMenu})
+  final int discount;
+  const AlertPayment({Key? key, required this.menu, required this.total, required this.service, required this.removeMenu, required this.discount})
       : super(key: key);
 
   @override
@@ -131,13 +132,13 @@ class _AlertPaymentState extends State<AlertPayment> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Diskon',
                     style: defaultStyle,
                   ),
                   Text(
-                    '0',
+                    Converter.currencyIndonesia(widget.discount),
                     style: defaultStyle,
                   )
                 ],

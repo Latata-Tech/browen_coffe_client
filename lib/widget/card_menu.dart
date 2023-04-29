@@ -92,9 +92,11 @@ class _CardMenuState extends State<CardMenu> {
                             onChanged: (String? value) {
                               setState(() {
                                 selectedVariant = value!;
-                                price = selectedVariant == 'hot'
-                                    ? widget.menu.hotPrice
-                                    : widget.menu.coldPrice;
+                                if(selectedVariant == 'hot') {
+                                  price = widget.menu.promoHotPrice != 0 ? widget.menu.promoHotPrice : widget.menu.hotPrice;
+                                } else {
+                                  price = widget.menu.promoIcePrice != 0 ? widget.menu.promoIcePrice : widget.menu.coldPrice;
+                                }
                               });
                             }),
                         const SizedBox(
@@ -167,6 +169,12 @@ class _CardMenuState extends State<CardMenu> {
                         if(quantity == 0) {
                           ScaffoldMessenger.of(context).showSnackBar(alert('Quantity tidak boleh 0', Colors.redAccent));
                         } else {
+                          int discount = 0;
+                          if(selectedVariant == 'hot' && widget.menu.promoHotPrice != 0) {
+                            discount = widget.menu.hotPrice - widget.menu.promoHotPrice;
+                          } else if(selectedVariant == 'ice' && widget.menu.promoIcePrice != 0) {
+                            discount = widget.menu.coldPrice - widget.menu.promoIcePrice;
+                          }
                           widget.menuSelected(
                             OrderMenu(
                                 id: widget.menu.id,
@@ -174,6 +182,7 @@ class _CardMenuState extends State<CardMenu> {
                                 name: widget.menu.name,
                                 price: price,
                                 quantity: quantity,
+                                discount: discount,
                                 variant: selectedVariant),
                           );
                         }
