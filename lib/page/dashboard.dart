@@ -32,28 +32,34 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: const Text('Dashboard'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/dashboard');
-              },
-            ),
-            ListTile(
-              title: const Text('Penjualan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/selling');
-              },
-            ),
-            ListTile(
-              title: const Text('Laporan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/report');
-              },
-            ),
-          ],
+        child: Container(
+          color: const Color(0XFF303030),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.dashboard, color: Colors.white,),
+                title: const Text('Dashboard', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/dashboard');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.point_of_sale, color: Colors.white,),
+                title: const Text('Penjualan', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/selling');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.description, color: Colors.white,),
+                title: const Text('Laporan', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/report');
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: FutureBuilder(
@@ -79,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
                     height: MediaQuery
                         .of(context)
                         .size
-                        .height / 5,
+                        .height / 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -91,14 +97,14 @@ class _DashboardState extends State<Dashboard> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(33),
                               color: const Color(0XFFD1E3F8)),
-                          height: 217,
+                          height: MediaQuery.of(context).size.height / 2.5,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Jumlah Penjualan Hari Ini",
                                   style: TextStyle(fontWeight: FontWeight.w700)),
-                              const SizedBox(
-                                height: 50,
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 16,
                               ),
                               Center(
                                 child: Text(
@@ -118,14 +124,14 @@ class _DashboardState extends State<Dashboard> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(33),
                               color: const Color(0XFFD9D9D9)),
-                          height: 217,
+                          height: MediaQuery.of(context).size.height / 2.5,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Jumlah Pesanan selesai",
                                   style: TextStyle(fontWeight: FontWeight.w700)),
-                              const SizedBox(
-                                height: 50,
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 16,
                               ),
                               Center(
                                 child: Text(
@@ -144,7 +150,7 @@ class _DashboardState extends State<Dashboard> {
                             borderRadius: BorderRadius.circular(33),
                             color: const Color(0XFFDAEEDC),
                           ),
-                          height: 217,
+                          height: MediaQuery.of(context).size.height / 2.5,
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.all(8),
                           child: Column(
@@ -154,8 +160,8 @@ class _DashboardState extends State<Dashboard> {
                                 "Jumlah Pesanan Belum Selesai",
                                 style: TextStyle(fontWeight: FontWeight.w700),
                               ),
-                              const SizedBox(
-                                height: 50,
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height / 16,
                               ),
                               Center(
                                 child: Text(

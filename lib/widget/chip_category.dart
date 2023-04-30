@@ -14,7 +14,7 @@ class ChipCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      width: 700,
+      width: MediaQuery.of(context).size.width / 1.5,
       height: 83,
       decoration: BoxDecoration(
           color: const Color(0XFFD9D9D9),

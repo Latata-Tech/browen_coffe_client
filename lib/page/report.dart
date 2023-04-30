@@ -37,28 +37,34 @@ class _ReportState extends State<Report> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: const Text('Dashboard'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/dashboard');
-              },
-            ),
-            ListTile(
-              title: const Text('Penjualan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/selling');
-              },
-            ),
-            ListTile(
-              title: const Text('Laporan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/report');
-              },
-            ),
-          ],
+        child: Container(
+          color: const Color(0XFF303030),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.dashboard, color: Colors.white,),
+                title: const Text('Dashboard', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/dashboard');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.point_of_sale, color: Colors.white,),
+                title: const Text('Penjualan', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/selling');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.description, color: Colors.white,),
+                title: const Text('Laporan', style: TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/report');
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: FutureBuilder(

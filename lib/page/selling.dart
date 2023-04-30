@@ -15,6 +15,7 @@ import '../model/order_menu.dart';
 
 class Selling extends StatefulWidget {
   final LocalStorage storage;
+
   const Selling({Key? key, required this.storage}) : super(key: key);
 
   @override
@@ -27,10 +28,12 @@ class _SellingState extends State<Selling> {
   late final CategoryService categoryService;
   late Future<List<Menu>> _futureMenu;
   late Future<List<Category>>? _futureCategory;
+  TextEditingController search = TextEditingController();
   Future<List<Menu>>? filteredMenu;
   late int selectedChip;
   List<OrderMenu> menu = [];
   int _selectedNavigation = 0;
+  int categoryId = 0;
 
   @override
   void initState() {
@@ -65,6 +68,14 @@ class _SellingState extends State<Selling> {
     setState(() {
       filteredMenu = menuService.getMenus(categoryId: id);
       selectedChip = index;
+      categoryId = id;
+    });
+  }
+
+  void filterBySearch(int category, String search) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      filteredMenu = menuService.getMenus(categoryId: category, search: search.toLowerCase());
     });
   }
 
@@ -72,6 +83,11 @@ class _SellingState extends State<Selling> {
     setState(() {
       _selectedNavigation = index;
     });
+  }
+  @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
   }
 
   @override
@@ -85,51 +101,83 @@ class _SellingState extends State<Selling> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: const Text('Dashboard'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/dashboard');
-              },
-            ),
-            ListTile(
-              title: const Text('Penjualan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/selling');
-              },
-            ),
-            ListTile(
-              title: const Text('Laporan'),
-              onTap: () {
-                Navigator.popAndPushNamed(context, '/report');
-              },
-            ),
-          ],
+        child: Container(
+          color: const Color(0XFF303030),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                leading: const Icon(
+                  Icons.dashboard,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  'Dashboard',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/dashboard');
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.point_of_sale,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  'Penjualan',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/selling');
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.description,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  'Laporan',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/report');
+                },
+              ),
+            ],
+          ),
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: _selectedNavigation == 1 ? Order(orderService: orderService) : Container(
-        padding: const EdgeInsets.all(20),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ChipCategory(categories: _futureCategory, filterMenu: filterByCategory, selectedChip: selectedChip,),
-                const SizedBox(
-                  height: 20,
+      body: _selectedNavigation == 1
+          ? Order(orderService: orderService)
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ChipCategory(
+                          categories: _futureCategory,
+                          filterMenu: filterByCategory,
+                          selectedChip: selectedChip,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        menuList(),
+                      ],
+                    ),
+                    orderMenu()
+                  ],
                 ),
-                menuList(),
-              ],
+              ),
             ),
-            orderMenu()
-          ],
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Menu'),
@@ -138,7 +186,6 @@ class _SellingState extends State<Selling> {
         selectedItemColor: Colors.blue,
         currentIndex: _selectedNavigation,
         onTap: _onNavigationTapped,
-
       ),
     );
   }
@@ -147,7 +194,8 @@ class _SellingState extends State<Selling> {
     return Flexible(
       child: Container(
         padding: const EdgeInsets.all(10),
-        width: 700,
+        width: MediaQuery.of(context).size.width / 1.5,
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             color: const Color(0XFFD9D9D9),
             borderRadius: BorderRadius.circular(10)),
@@ -158,10 +206,14 @@ class _SellingState extends State<Selling> {
               width: 200,
               height: 36,
               child: TextFormField(
+                controller: search,
                 decoration: InputDecoration(
-                    hintText: 'Cari...',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+                  hintText: 'Cari...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onEditingComplete: () => filterBySearch(categoryId, search.text),
               ),
             ),
             const SizedBox(
@@ -230,20 +282,32 @@ class _SellingState extends State<Selling> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if(menu.isNotEmpty) {
-                      showDialog(context: context, builder: (BuildContext context) {
-                        return AlertPayment(menu: menu,
-                          total: menu.map((value) => value.quantity * value.price).toList().reduce((value, element) => value + element),
-                          service: orderService,
-                          removeMenu: removeAllOrderItem,
-                          discount: menu.map((value) => value.quantity * value.discount).toList().reduce((value, element) => value + element)
-                        );
-                      });
+                    if (menu.isNotEmpty) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertPayment(
+                                menu: menu,
+                                total: menu
+                                    .map(
+                                        (value) => value.quantity * value.price)
+                                    .toList()
+                                    .reduce(
+                                        (value, element) => value + element),
+                                service: orderService,
+                                removeMenu: removeAllOrderItem,
+                                discount: menu
+                                    .map((value) =>
+                                        value.quantity * value.discount)
+                                    .toList()
+                                    .reduce(
+                                        (value, element) => value + element));
+                          });
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0XFF509D57),
-                      fixedSize: const Size(double.infinity, 40),
+                    backgroundColor: const Color(0XFF509D57),
+                    fixedSize: const Size(double.infinity, 40),
                   ),
                   child: const Text("Buat Pesanan"),
                 ),
