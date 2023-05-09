@@ -28,10 +28,6 @@ class _OrderState extends State<Order> {
         builder: (BuildContext context) => DetailOrder(order: order));
   }
 
-  void displayConfirmation(String code) {
-
-  }
-
   void markAsDone(String orderCode) {
     widget.orderService.orderDone(orderCode).then((value) {
       final snackBar = alert(
@@ -62,7 +58,6 @@ class _OrderState extends State<Order> {
               future: widget.orderService.getOrder(),
               builder: (BuildContext context,
                   AsyncSnapshot<List<order_model.Order>> snapshot) {
-                print("Dipanggil Bangh");
                 if (snapshot.hasData) {
                   return snapshot.data!.length > 0
                       ? ListView.builder(

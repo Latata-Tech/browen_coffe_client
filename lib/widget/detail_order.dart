@@ -93,10 +93,9 @@ class DetailOrder extends StatelessWidget {
           ],
         ),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
-        Container(
-          width: double.infinity,
-          child: OutlinedButton(
+        OutlinedButton(
             style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.redAccent)),
             child: const Text(
@@ -107,7 +106,27 @@ class DetailOrder extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-        )
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0XFF509D57),
+            shadowColor: Colors.transparent,
+            elevation: 0.0
+          ),
+          child: const Text('Download'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shadowColor: Colors.transparent,
+              elevation: 0.0
+          ),
+          child: const Text('Cetak'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ],
     );
   }
