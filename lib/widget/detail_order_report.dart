@@ -50,7 +50,8 @@ class _ListOrderItem extends StatelessWidget {
 
 class DetailOrderReport extends StatelessWidget {
   final Order order;
-  const DetailOrderReport({Key? key, required this.order}) : super(key: key);
+  final Function download;
+  const DetailOrderReport({Key? key, required this.order, required this.download}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +116,7 @@ class DetailOrderReport extends StatelessWidget {
           ),
           child: const Text('Download'),
           onPressed: () {
+            download(order.code);
             Navigator.of(context).pop();
           },
         ),

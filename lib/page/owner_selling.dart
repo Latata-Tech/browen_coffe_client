@@ -1,5 +1,6 @@
 import 'package:browenz_coffee/helpers/converter.dart';
 import 'package:browenz_coffee/service/order.dart';
+import 'package:browenz_coffee/widget/alert.dart';
 import 'package:browenz_coffee/widget/detail_order.dart';
 import 'package:browenz_coffee/widget/detail_order_report.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,19 @@ class _OwnerSellingState extends State<OwnerSelling> {
   void displayOrder(order_model.Order order) {
     showDialog(
         context: context,
-        builder: (BuildContext context) => DetailOrderReport(order: order));
+        builder: (BuildContext context) => DetailOrderReport(order: order, download:  download,));
+  }
+
+  void download(String code) {
+    widget.orderService.downloadInvoice(code).then((value){
+      final snackBar = alert('File berhasil di download dan diletakan pada folder Downloads', Colors.green);
+
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   @override
