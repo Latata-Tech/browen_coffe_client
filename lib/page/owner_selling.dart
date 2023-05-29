@@ -1,6 +1,7 @@
 import 'package:browenz_coffee/helpers/converter.dart';
 import 'package:browenz_coffee/service/order.dart';
 import 'package:browenz_coffee/widget/detail_order.dart';
+import 'package:browenz_coffee/widget/detail_order_report.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../model/order.dart' as order_model;
@@ -35,7 +36,7 @@ class _OwnerSellingState extends State<OwnerSelling> {
   void displayOrder(order_model.Order order) {
     showDialog(
         context: context,
-        builder: (BuildContext context) => DetailOrder(order: order));
+        builder: (BuildContext context) => DetailOrderReport(order: order));
   }
 
   @override

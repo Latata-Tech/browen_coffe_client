@@ -1,3 +1,4 @@
+import 'package:browenz_coffee/service/auth.dart';
 import 'package:browenz_coffee/service/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,11 +15,13 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late final DashboardService service;
+  late final AuthService authService;
   late final Future<model_dashboard.Dashboard> dashboardData;
   @override
   void initState() {
     service = DashboardService(storage: widget.storage);
     dashboardData = service.getDashboard();
+    authService = AuthService(widget.storage);
     super.initState();
   }
   @override
@@ -26,9 +29,21 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () => print("Profil"),
-              icon: const Icon(Icons.account_circle_rounded))
+          PopupMenuButton(
+              icon: const Icon(Icons.account_circle_rounded),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                      onTap: () {
+                        authService.logout().then((value) {
+                          Navigator.popAndPushNamed(context, '/login');
+                        });
+                      },
+                      child: const Text('Logout')
+                  )
+                ];
+              }
+          )
         ],
       ),
       drawer: Drawer(

@@ -166,8 +166,8 @@ class _CardMenuState extends State<CardMenu> {
                     ElevatedButton(
                       child: const Text('Simpan'),
                       onPressed: () {
-                        if(quantity == 0) {
-                          ScaffoldMessenger.of(context).showSnackBar(alert('Quantity tidak boleh 0', Colors.redAccent));
+                        if(quantity == 0 || price == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(alert('Quantity atau Harga tidak boleh 0', Colors.redAccent));
                         } else {
                           int discount = 0;
                           if(selectedVariant == 'hot' && widget.menu.promoHotPrice != 0) {

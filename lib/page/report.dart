@@ -31,9 +31,21 @@ class _ReportState extends State<Report> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () => print("Profil"),
-              icon: const Icon(Icons.account_circle_rounded))
+          PopupMenuButton(
+            icon: const Icon(Icons.account_circle_rounded),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                      onTap: () {
+                        service.logout().then((value) {
+                          Navigator.popAndPushNamed(context, '/login');
+                        });
+                      },
+                      child: const Text('Logout')
+                  )
+                ];
+              }
+          )
         ],
       ),
       drawer: Drawer(

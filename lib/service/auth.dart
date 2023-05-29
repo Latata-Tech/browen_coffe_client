@@ -42,4 +42,19 @@ class AuthService {
     }
   }
 
+  Future<User> logout() async {
+    try {
+      final response = await http.get(Uri.parse('$API_URL/auth/logout'), headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+      if(response.statusCode == 200) {
+        return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      }
+      throw Exception('err');
+    } catch (e) {
+      return User(0, "", "", 0);
+    }
+  }
+
 }

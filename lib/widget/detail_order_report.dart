@@ -1,4 +1,5 @@
 import 'package:browenz_coffee/helpers/converter.dart';
+import 'package:browenz_coffee/page/print.dart';
 import 'package:flutter/material.dart';
 import '../model/order.dart';
 
@@ -9,10 +10,10 @@ const TextStyle defaultStyle = TextStyle(
 class _ListOrderItem extends StatelessWidget {
   const _ListOrderItem(
       {Key? key,
-      required this.name,
-      required this.quantity,
-      required this.price,
-      required this.variant})
+        required this.name,
+        required this.quantity,
+        required this.price,
+        required this.variant})
       : super(key: key);
 
   final String name, variant;
@@ -47,9 +48,9 @@ class _ListOrderItem extends StatelessWidget {
   }
 }
 
-class DetailOrder extends StatelessWidget {
+class DetailOrderReport extends StatelessWidget {
   final Order order;
-  const DetailOrder({Key? key, required this.order}) : super(key: key);
+  const DetailOrderReport({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +65,12 @@ class DetailOrder extends StatelessWidget {
                 children: order.orderDetail
                     .map(
                       (value) => _ListOrderItem(
-                        name: value.name,
-                        quantity: value.qty,
-                        price: value.total,
-                        variant: value.variant,
-                      ),
-                    )
+                    name: value.name,
+                    quantity: value.qty,
+                    price: value.total,
+                    variant: value.variant,
+                  ),
+                )
                     .toList(),
               ),
             ),
@@ -93,20 +94,39 @@ class DetailOrder extends StatelessWidget {
           ],
         ),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
-        Container(
-          width: double.infinity,
-          child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.redAccent)),
-              child: const Text(
-                'Tutup',
-                style: TextStyle(color: Colors.redAccent),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.redAccent)),
+          child: const Text(
+            'Tutup',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0XFF509D57),
+              shadowColor: Colors.transparent,
+              elevation: 0.0
+          ),
+          child: const Text('Download'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shadowColor: Colors.transparent,
+              elevation: 0.0
+          ),
+          child: const Text('Cetak'),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Print(order: order, orderDate: order.orderDate.split(' '),)));
+          },
         ),
       ],
     );

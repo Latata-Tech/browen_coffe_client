@@ -1,6 +1,7 @@
 import 'package:browenz_coffee/model/category.dart';
 import 'package:browenz_coffee/model/menu.dart';
 import 'package:browenz_coffee/page/order.dart';
+import 'package:browenz_coffee/service/auth.dart';
 import 'package:browenz_coffee/service/category.dart';
 import 'package:browenz_coffee/service/menu.dart';
 import 'package:browenz_coffee/service/order.dart';
@@ -26,6 +27,7 @@ class _SellingState extends State<Selling> {
   late final MenuService menuService;
   late final OrderService orderService;
   late final CategoryService categoryService;
+  late final AuthService authService;
   late Future<List<Menu>> _futureMenu;
   late Future<List<Category>>? _futureCategory;
   TextEditingController search = TextEditingController();
@@ -40,6 +42,7 @@ class _SellingState extends State<Selling> {
     super.initState();
     menuService = MenuService(widget.storage);
     orderService = OrderService(widget.storage);
+    authService = AuthService(widget.storage);
     categoryService = CategoryService(widget.storage);
     _futureMenu = menuService.getMenus();
     _futureCategory = categoryService.getCategories();
@@ -95,9 +98,21 @@ class _SellingState extends State<Selling> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () => print("Profil"),
-              icon: const Icon(Icons.account_circle_rounded))
+          PopupMenuButton(
+              icon: const Icon(Icons.account_circle_rounded),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                      onTap: () {
+                        authService.logout().then((value) {
+                          Navigator.popAndPushNamed(context, '/login');
+                        });
+                      },
+                      child: const Text('Logout')
+                  )
+                ];
+              }
+          )
         ],
       ),
       drawer: Drawer(
