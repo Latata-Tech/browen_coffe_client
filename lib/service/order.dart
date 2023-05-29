@@ -179,7 +179,7 @@ class OrderService {
       var response = await request.close();
       if(response.statusCode == 200) {
         var bytes = await consolidateHttpClientResponseBytes(response);
-        filePath = '/storage/emulated/0/Download/invoice-${code}';
+        filePath = '/storage/emulated/0/Download/invoice-${code}.pdf';
         file = File(filePath);
         await file.writeAsBytes(bytes);
       } else {
