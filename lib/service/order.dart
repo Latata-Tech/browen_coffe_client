@@ -6,8 +6,10 @@ import 'package:browenz_coffee/model/order.dart';
 import 'package:browenz_coffee/model/order_detail.dart';
 import 'package:browenz_coffee/model/order_menu.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class OrderService {
   LocalStorage storage;
@@ -168,27 +170,36 @@ class OrderService {
     }
   }
 
-  Future<String> downloadInvoice(String code) async {
-    HttpClient httpClient = new HttpClient();
-    File file;
-    String myurl = '$API_URL/orders/${code}';
-    String filePath = '';
+  Future<String?> downloadInvoice(String code) async {
+    String? message;
     try {
-      final request =
-          await httpClient.getUrl(Uri.parse(myurl));
-      var response = await request.close();
-      if(response.statusCode == 200) {
-        var bytes = await consolidateHttpClientResponseBytes(response);
-        filePath = '/storage/emulated/0/Download/invoice-${code}.pdf';
-        file = File(filePath);
-        await file.writeAsBytes(bytes);
-      } else {
-        filePath = 'Error code: ${response.statusCode}';
+      // Download image
+      final http.Response response =
+          await http.get(Uri.parse('$API_URL/orders/$code'), headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+
+      // Get temporary directory
+      final dir = await getTemporaryDirectory();
+
+      // Create an image name
+      var filename = '${dir.path}/invoice-$code.pdf';
+
+      // Save to filesystem
+      final file = File(filename);
+      await file.writeAsBytes(response.bodyBytes);
+
+      // Ask the user to save it
+      final params = SaveFileDialogParams(sourceFilePath: file.path);
+      final finalPath = await FlutterFileDialog.saveFile(params: params);
+
+      if (finalPath != null) {
+        message = 'Image saved to disk';
       }
-    } catch (ex) {
-      filePath = 'Can not fetch url';
-      print(ex);
+    } catch (e) {
+      message = 'An error occurred while saving the image';
     }
-    return filePath;
+    return message;
   }
 }

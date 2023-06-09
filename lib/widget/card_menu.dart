@@ -28,10 +28,10 @@ class _CardMenuState extends State<CardMenu> {
     super.initState();
     if (widget.menu.hotPrice == 0) {
       selectedVariant = variant.last;
-      price = widget.menu.coldPrice;
+      price = widget.menu.promoIcePrice != 0 ? widget.menu.promoIcePrice : widget.menu.coldPrice;
     } else {
       selectedVariant = variant.first;
-      price = widget.menu.hotPrice;
+      price = widget.menu.promoHotPrice != 0 ? widget.menu.promoHotPrice : widget.menu.hotPrice;
     }
   }
 

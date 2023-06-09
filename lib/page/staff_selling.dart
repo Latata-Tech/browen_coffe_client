@@ -4,6 +4,8 @@ import 'package:browenz_coffee/widget/detail_order.dart';
 import 'package:flutter/material.dart';
 import '../model/order.dart' as order_model;
 import '../model/order.dart';
+import '../widget/alert.dart';
+import '../widget/detail_order_report.dart';
 
 class StaffSelling extends StatefulWidget {
   final OrderService orderService;
@@ -25,8 +27,23 @@ class _StaffSellingState extends State<StaffSelling> {
   }
 
   void displayOrder(order_model.Order order) {
-    showDialog(context: context, builder: (BuildContext context) => DetailOrder(order: order));
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => DetailOrderReport(order: order, download:  download));
   }
+
+  void download(String code) {
+    widget.orderService.downloadInvoice(code).then((value){
+      final snackBar = alert('File berhasil di download dan diletakan pada folder Downloads', Colors.green);
+
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
