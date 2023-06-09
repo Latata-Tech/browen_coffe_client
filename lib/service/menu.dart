@@ -15,9 +15,11 @@ class MenuService {
     try {
       String uri = '$API_URL/menus';
       if(categoryId != null && categoryId != 0) uri = "$uri?category=$categoryId";
-      if(search != null && uri.contains("?")) {
+      print(search?.isEmpty);
+      if((search != '' && search != null) && uri.contains("?")) {
         uri = "$uri&search=$search";
-      } else if(search != null) {
+      } else if(search != '' && search != null) {
+        print("kesini");
         uri = "$uri?search=$search";
       }
       print(uri);

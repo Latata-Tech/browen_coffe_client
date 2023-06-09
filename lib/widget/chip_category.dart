@@ -43,10 +43,10 @@ class ChipCategory extends StatelessWidget {
                           onSelected: (bool value) {
                             filterMenu(snapshot.data![index].id, index);
                           },
-                          selected: snapshot.data![index].id == selectedChip,
+                          selected: index == selectedChip,
                           selectedColor: Colors.lightBlue,
                           labelStyle: TextStyle(
-                              color: snapshot.data![index].id == selectedChip  ? Colors.white : Colors.black),
+                              color: index == selectedChip  ? Colors.white : Colors.black),
                         ),
                       );
                     },
