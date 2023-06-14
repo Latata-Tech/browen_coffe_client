@@ -73,7 +73,7 @@ class _LoginState extends State<Login> {
                   obscureText: true,
                   validator: (String? value) {
                     if(value == null || value.isEmpty) {
-                      return 'Masukan alamat email yang valid';
+                      return 'Masukan password yang valid';
                     }
                     return null;
                   },
@@ -81,13 +81,19 @@ class _LoginState extends State<Login> {
                 SizedBox(height: MediaQuery.of(context).size.height / 30,),
                 ElevatedButton(
                     onPressed: () {
-                      authService.signIn(email.text, password.text).then((value) {
-                        if(value) Navigator.popAndPushNamed(context, '/dashboard');
-                        else {
-                          final snackBar = alert("Email atau Password yang dimasukan salah!", Colors.redAccent);
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      });
+                      if(email.text == '') {
+                        ScaffoldMessenger.of(context).showSnackBar(alert("Email tidak boleh kosong!", Colors.redAccent));
+                      } else if(password.text == '') {
+                        ScaffoldMessenger.of(context).showSnackBar(alert("Password tidak boleh kosong!", Colors.redAccent));
+                      } else {
+                        authService.signIn(email.text, password.text).then((value) {
+                          if(value) Navigator.popAndPushNamed(context, '/dashboard');
+                          else {
+                            final snackBar = alert("Email atau Password yang dimasukan salah!", Colors.redAccent);
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff196CD2),
