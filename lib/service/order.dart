@@ -16,6 +16,34 @@ class OrderService {
 
   OrderService(this.storage);
 
+  Future<List<String>> updateOrder(
+      List<OrderDetail> order, int pay, String code) async {
+    try {
+      final response = await http.put(Uri.parse("$API_URL/orders/$code/update"),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+          },
+          body: jsonEncode(<String, dynamic>{
+            'pay': pay,
+            'order_detail': order
+                .map((value) => {
+              'id': value.id,
+              'qty': value.qty,
+            })
+                .toList()
+          }));
+      print(response.body);
+      final resBody = jsonDecode(response.body) as Map<String, dynamic>;
+      return [resBody['status'], resBody['message']];
+    } catch (e) {
+      print(e);
+      return ["failed", "Terjadi kesalahan pada aplikasi."];
+    }
+  }
+
+
   Future<List<String>> createOrder(
       List<OrderMenu> order, int discount, int pay, String paymentType) async {
     try {
@@ -167,6 +195,25 @@ class OrderService {
     } catch (e) {
       print(e);
       return 0;
+    }
+  }
+
+  Future<Order?> getOrderDetail(String code) async {
+    try {
+      final response = await http
+          .get(Uri.parse('$API_URL/orders/$code/detail'), headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${storage.getItem('accessToken')}'
+      });
+      final resBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = (resBody['data'] as Map<String, dynamic>);
+      print(data);
+      List<OrderDetail> detail = (data['detail'] as List<dynamic>).map((value) => OrderDetail.fromJson(value)).toList();
+      return Order.fromJson(data, detail);
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 

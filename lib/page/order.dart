@@ -1,3 +1,4 @@
+import 'package:browenz_coffee/page/update_selling.dart';
 import 'package:browenz_coffee/service/order.dart';
 import 'package:browenz_coffee/widget/alert.dart';
 import 'package:browenz_coffee/widget/detail_order_report.dart';
@@ -127,6 +128,11 @@ class _OrderState extends State<Order> {
                                         );
                                       },
                                     ),
+                                        PopupMenuItem(
+                                          child: const Text('Edit'),
+                                          onTap: ()  => Future(() => Navigator.push(context,
+                                              MaterialPageRoute(builder: (_) => UpdateSelling(service: widget.orderService, code: snapshot.data![index].code))))
+                                        ),
                                   ],
                                 ),
                                 onTap: () =>
