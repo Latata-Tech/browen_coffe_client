@@ -54,7 +54,7 @@ class DetailOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Detail Pesanan ${order.code} - ${order.paymentType}'),
+      title: Text('Detail Pesanan ${order.code} - Tunai'),
       content: SingleChildScrollView(
         child: Column(
           children: [

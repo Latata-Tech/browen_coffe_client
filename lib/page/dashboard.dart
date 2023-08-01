@@ -24,6 +24,32 @@ class _DashboardState extends State<Dashboard> {
     authService = AuthService(widget.storage);
     super.initState();
   }
+
+  void logout(ctx) {
+    dashboardData.then((value) {
+      if(value.orderProcess <= 0) {
+        authService.logout().then((value) {
+          Navigator.popAndPushNamed(context, '/login');
+        });
+        return;
+      }
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+          content: Text(
+            'Terdapat pesanan belum proses ${value.orderProcess}'),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              OutlinedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.redAccent)),
+                child: const Text('Tutup', style: TextStyle(color: Colors.redAccent)),
+              ),
+            ],
+          ));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +61,10 @@ class _DashboardState extends State<Dashboard> {
                 return [
                   PopupMenuItem(
                       onTap: () {
-                        authService.logout().then((value) {
-                          Navigator.popAndPushNamed(context, '/login');
-                        });
+                        Future.delayed(
+                            const Duration(seconds: 0),
+                                () => logout(context)
+                        );
                       },
                       child: const Text('Logout')
                   )

@@ -56,7 +56,7 @@ class DetailOrderReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Detail Pesanan ${order.code} - ${order.paymentType}'),
+      title: Text('Detail Pesanan ${order.code} - Tunai'),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -118,16 +118,6 @@ class DetailOrderReport extends StatelessWidget {
           onPressed: () {
             download(order.code);
             Navigator.of(context).pop();
-          },
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shadowColor: Colors.transparent,
-              elevation: 0.0
-          ),
-          child: const Text('Cetak'),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Print(order: order, orderDate: order.orderDate.split(' '),)));
           },
         ),
       ],
