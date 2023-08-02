@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
           context: context,
           builder: (BuildContext context) => AlertDialog(
           content: Text(
-            'Terdapat pesanan belum proses ${value.orderProcess}'),
+            '${value.orderProcess} Pesanan belum selesai di proses.\n Mohon periksa kembali'),
             actionsAlignment: MainAxisAlignment.center,
             actions: [
               OutlinedButton(
